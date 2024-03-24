@@ -29,27 +29,28 @@ namespace SettlementBookingSystem.Application.Bookings.Repositories
 
         public bool BookingExistsByTime(string BookingTime)
         {
-           foreach (var booking in Bookings)
+            if (TimeSpan.TryParse(BookingTime, out var timeCompare))
             {
-                if (TimeSpan.TryParse(booking.BookingTime, out var fromTime))
+                var timeCompareTo = timeCompare + TimeSpan.FromMinutes(59);
+                foreach (var booking in Bookings)
                 {
-                    if (TimeSpan.TryParse(BookingTime, out var timeCompare))
+                    if (TimeSpan.TryParse(booking.BookingTime, out var fromTime))
                     {
-                        var toTime = fromTime + TimeSpan.FromMinutes(59);
-                        if (fromTime <= timeCompare && timeCompare <= toTime)
-                        {
-                            return true;
-                        }
+                            var toTime = fromTime + TimeSpan.FromMinutes(59);
+                            if ( (fromTime <= timeCompare && timeCompare <= toTime) || (fromTime <= timeCompareTo && timeCompareTo <= toTime))
+                            {
+                                return true;
+                            }                    
                     }
                     else
                     {
-                        throw new ValidationException($"Invalid time {timeCompare}");
+                        throw new ValidationException($"Invalid time {booking.BookingTime}");
                     }
                 }
-                else
-                {
-                    throw new ValidationException($"Invalid time {booking.BookingTime}");
-                }
+            }
+            else
+            {
+                throw new ValidationException($"Invalid time {timeCompare}");
             }
             return false;
         }
