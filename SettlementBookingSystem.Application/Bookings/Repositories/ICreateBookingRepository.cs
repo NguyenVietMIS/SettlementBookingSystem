@@ -10,11 +10,11 @@ namespace SettlementBookingSystem.Application.Bookings.Repositories
 {
     public interface ICreateBookingRepository
     {
-        public Task AddBooking(Booking Booking);
-        public Task<List<Booking>> GetBookings();
-        public Task<bool> BookingExists(BookingDto BookingDTO);
+        public BookingDto AddBooking(string strName, string strBookingTime);
+        public List<Booking> GetBookings();
+        public bool BookingExists(BookingDto BookingDTO);
         public bool BookingExistsByTime(string BookingTime);
-        public Task<Booking?> GetBookingByTime(string BookingTime);
+        public Booking? GetBookingByTime(string BookingTime);
 
     }
 }

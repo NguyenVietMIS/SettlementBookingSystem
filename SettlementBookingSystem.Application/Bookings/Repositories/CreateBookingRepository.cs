@@ -1,4 +1,5 @@
-﻿using SettlementBookingSystem.Application.Bookings;
+﻿using MediatR;
+using SettlementBookingSystem.Application.Bookings;
 using SettlementBookingSystem.Application.Bookings.Dtos;
 using System;
 using System.Collections.Generic;
@@ -17,14 +18,14 @@ namespace SettlementBookingSystem.Application.Bookings.Repositories
             new Booking { BookingDTO = new BookingDto(), Name = "Viet", BookingTime="10:15" }
         };
 
-        public Task<List<Booking>> GetBookings()
+        public List<Booking> GetBookings()
         {  
-            return Task.FromResult(Bookings); 
+            return Bookings; 
         }
 
-        public Task<bool> BookingExists (BookingDto BookingDTO)
+        public bool BookingExists (BookingDto BookingDTO)
         {
-            return Task.FromResult(Bookings.Any(x => x.BookingDTO == BookingDTO));
+            return Bookings.Any(x => x.BookingDTO == BookingDTO);
         }
 
         public bool BookingExistsByTime(string BookingTime)
@@ -55,15 +56,16 @@ namespace SettlementBookingSystem.Application.Bookings.Repositories
             return false;
         }
 
-        public Task<Booking?> GetBookingByTime(string BookingTime)
+        public Booking? GetBookingByTime(string BookingTime)
         {
-            return Task.FromResult(Bookings.FirstOrDefault(x => x.BookingTime == BookingTime));
+            return Bookings.FirstOrDefault(x => x.BookingTime == BookingTime);
         }
 
-        public Task AddBooking(Booking Booking)
+        public BookingDto AddBooking(string strName, string strBookingTime)
         {
-            Bookings.Add(Booking);
-            return Task.CompletedTask;
+            var booking = new Booking { BookingDTO = new BookingDto(), Name = strName, BookingTime = strBookingTime };
+            Bookings.Add(booking);
+            return booking.BookingDTO;
         }
     }
 }

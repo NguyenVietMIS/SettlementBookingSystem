@@ -23,9 +23,7 @@ namespace SettlementBookingSystem.Application.Bookings.Commands
             var validator = new CreateBookingValidator(_bookingRepository);
             validator.ValidateAndThrow(request);
 
-            var booking = new Booking { BookingDTO = new BookingDto(), Name = request.Name, BookingTime = request.BookingTime };
-            await _bookingRepository.AddBooking(booking);
-            return booking.BookingDTO;
+            return _bookingRepository.AddBooking(request.Name,request.BookingTime);
         }
     }
 }
